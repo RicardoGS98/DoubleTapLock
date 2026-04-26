@@ -48,7 +48,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.doubletaplock.app.R
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.doubletaplock.app.service.DoubleTapWallpaperService
@@ -127,10 +129,13 @@ fun MainScreen() {
                 .padding(paddingValues)
                 .padding(start = 24.dp, end = 24.dp, top = 32.dp)
         ) {
-            Text("Double Tap Lock", style = MaterialTheme.typography.headlineMedium)
+            Text(
+                text = stringResource(R.string.app_name),
+                style = MaterialTheme.typography.headlineMedium
+            )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = "Bloquea tu pantalla con doble toque en el escritorio",
+                text = stringResource(R.string.home_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -142,20 +147,20 @@ fun MainScreen() {
 
             StepCard(
                 number = 1,
-                title = "Activar servicio de bloqueo",
-                description = "Necesario para bloquear la pantalla",
-                activeLabel = "Activar",
-                completedLabel = "Revisar",
+                title = stringResource(R.string.step_1_title),
+                description = stringResource(R.string.step_1_description),
+                activeLabel = stringResource(R.string.action_activate),
+                completedLabel = stringResource(R.string.action_review),
                 state = stateFor(1, activeIndex, step1Done),
                 onAction = { accessibilityLauncher.launch(buildAccessibilitySettingsIntent()) }
             )
             Spacer(Modifier.height(12.dp))
             StepCard(
                 number = 2,
-                title = "Elegir imagen de fondo",
-                description = "Cualquier foto de tu galería",
-                activeLabel = "Elegir",
-                completedLabel = "Cambiar",
+                title = stringResource(R.string.step_2_title),
+                description = stringResource(R.string.step_2_description),
+                activeLabel = stringResource(R.string.action_pick),
+                completedLabel = stringResource(R.string.action_change),
                 state = stateFor(2, activeIndex, step2Done),
                 onAction = {
                     pickImageLauncher.launch(
@@ -166,10 +171,10 @@ fun MainScreen() {
             Spacer(Modifier.height(12.dp))
             StepCard(
                 number = 3,
-                title = "Activar fondo de pantalla",
-                description = "Establecerlo como live wallpaper",
-                activeLabel = "Activar",
-                completedLabel = "Reactivar",
+                title = stringResource(R.string.step_3_title),
+                description = stringResource(R.string.step_3_description),
+                activeLabel = stringResource(R.string.action_activate),
+                completedLabel = stringResource(R.string.action_reactivate),
                 state = stateFor(3, activeIndex, step3Done),
                 onAction = { liveWallpaperLauncher.launch(buildSetLiveWallpaperIntent(context)) }
             )
@@ -209,7 +214,7 @@ private fun CompletionBanner() {
             )
             Spacer(Modifier.width(8.dp))
             Text(
-                text = "Listo. Doble toque para bloquear.",
+                text = stringResource(R.string.completion_message),
                 style = MaterialTheme.typography.bodyMedium
             )
         }

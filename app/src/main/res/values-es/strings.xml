@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wallpaper_description">Toca dos veces el fondo de pantalla para bloquear</string>
+    <string name="accessibility_service_description">Permite bloquear la pantalla con doble toque en el escritorio. La app no lee, escucha ni recolecta ningún dato del dispositivo.</string>
+
+    <string name="home_subtitle">Bloquea tu pantalla con doble toque en el escritorio</string>
+    <string name="completion_message">Listo. Doble toque para bloquear.</string>
+
+    <string name="step_1_title">Activar servicio de bloqueo</string>
+    <string name="step_1_description">Necesario para bloquear la pantalla</string>
+    <string name="step_2_title">Elegir imagen de fondo</string>
+    <string name="step_2_description">Cualquier foto de tu galería</string>
+    <string name="step_3_title">Activar fondo de pantalla</string>
+    <string name="step_3_description">Establecerlo como live wallpaper</string>
+
+    <string name="action_activate">Activar</string>
+    <string name="action_review">Revisar</string>
+    <string name="action_pick">Elegir</string>
+    <string name="action_change">Cambiar</string>
+    <string name="action_reactivate">Reactivar</string>
+</resources>

@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Double Tap Lock</string>
-    <string name="wallpaper_label">Double Tap Lock</string>
-    <string name="wallpaper_description">Toca dos veces el fondo de pantalla para bloquear</string>
-    <string name="accessibility_service_description">Permite bloquear la pantalla con doble toque en el escritorio. La app no lee, escucha ni recolecta ningún dato del dispositivo.</string>
+    <string name="app_name" translatable="false">Double Tap Lock</string>
+    <string name="wallpaper_label" translatable="false">Double Tap Lock</string>
+    <string name="wallpaper_description">Double tap the wallpaper to lock</string>
+    <string name="accessibility_service_description">Lets you lock the screen with a double tap on the home screen. The app does not read, listen to or collect any data from the device.</string>
+
+    <string name="home_subtitle">Lock your screen with a double tap on the home screen</string>
+    <string name="completion_message">Done. Double tap to lock.</string>
+
+    <string name="step_1_title">Enable lock service</string>
+    <string name="step_1_description">Required to lock the screen</string>
+    <string name="step_2_title">Pick a background image</string>
+    <string name="step_2_description">Any photo from your gallery</string>
+    <string name="step_3_title">Activate live wallpaper</string>
+    <string name="step_3_description">Set it as your live wallpaper</string>
+
+    <string name="action_activate">Activate</string>
+    <string name="action_review">Review</string>
+    <string name="action_pick">Pick</string>
+    <string name="action_change">Change</string>
+    <string name="action_reactivate">Reactivate</string>
 </resources>
