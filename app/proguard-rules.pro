@@ -1,0 +1,2 @@
+-keep class com.doubletaplock.app.service.DoubleTapWallpaperService { *; }
+-keep class com.doubletaplock.app.service.LockAccessibilityService { *; }
