@@ -1,5 +1,6 @@
 package com.doubletaplock.app.service
 
+import android.app.WallpaperColors
 import android.app.WallpaperManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -19,6 +20,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 private const val DOUBLE_TAP_THRESHOLD_MS = 300L
@@ -44,6 +46,11 @@ class DoubleTapWallpaperService : WallpaperService() {
         private val offsetAnimator = OffsetAnimator(initial = INITIAL_X_OFFSET) { draw() }
 
         private var bitmap: Bitmap? = null
+        // Cached so onComputeColors() — invoked by the system on a binder
+        // thread — can return without touching the bitmap (which only the
+        // Main-dispatcher coroutine is allowed to mutate/recycle).
+        @Volatile
+        private var cachedColors: WallpaperColors? = null
         private var loadedTimestamp: Long = 0L
         private var surfaceWidth: Int = 0
         private var surfaceHeight: Int = 0
@@ -150,12 +157,23 @@ class DoubleTapWallpaperService : WallpaperService() {
             loadJob = scope.launch {
                 val ts = if (wallpaperFile.exists()) wallpaperFile.lastModified() else 0L
                 val newBitmap = loadCoverBitmap(wallpaperFile, surfaceWidth, surfaceHeight)
+                // Sample colors off the main thread — fromBitmap() scans pixels.
+                val newColors = newBitmap?.let {
+                    withContext(Dispatchers.IO) { WallpaperColors.fromBitmap(it) }
+                }
                 recycleBitmap()
                 bitmap = newBitmap
                 loadedTimestamp = ts
+                cachedColors = newColors
+                // Tells the system to re-query onComputeColors() — Material You
+                // reads from the user's photo instead of falling back to the
+                // wallpaper.xml thumbnail.
+                notifyColorsChanged()
                 draw()
             }
         }
+
+        override fun onComputeColors(): WallpaperColors? = cachedColors
 
         private fun recycleBitmap() {
             val previous = bitmap
