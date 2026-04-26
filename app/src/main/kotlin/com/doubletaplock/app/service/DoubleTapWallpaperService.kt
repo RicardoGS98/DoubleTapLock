@@ -3,6 +3,7 @@ package com.doubletaplock.app.service
 import android.app.WallpaperManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
 import android.os.FileObserver
 import android.os.SystemClock
@@ -47,6 +48,12 @@ class DoubleTapWallpaperService : WallpaperService() {
         private var surfaceWidth: Int = 0
         private var surfaceHeight: Int = 0
         private var visible: Boolean = false
+        // Set the moment a double tap is detected and stays true until the
+        // wallpaper becomes visible again (i.e. the user unlocked). While
+        // true, draw() is suppressed so the surface stays solid black —
+        // otherwise an in-flight animator frame can repaint the image right
+        // as the system lock animation begins, producing the visible flash.
+        private var locking: Boolean = false
 
         private var loadJob: Job? = null
         private var fileObserver: FileObserver? = null
@@ -67,6 +74,9 @@ class DoubleTapWallpaperService : WallpaperService() {
         override fun onVisibilityChanged(visible: Boolean) {
             this.visible = visible
             if (visible) {
+                // The user is back on the launcher — clear the lock latch and
+                // resume normal rendering.
+                locking = false
                 if (needsReload()) reloadAndDraw() else draw()
             } else {
                 // No drawing while hidden — and no animation either.
@@ -115,7 +125,7 @@ class DoubleTapWallpaperService : WallpaperService() {
             if (action == WallpaperManager.COMMAND_TAP &&
                 tapDetector.onTap(SystemClock.uptimeMillis())
             ) {
-                LockAccessibilityService.lockNow()
+                triggerLock()
             }
             return super.onCommand(action, x, y, z, extras, resultRequested)
         }
@@ -154,7 +164,7 @@ class DoubleTapWallpaperService : WallpaperService() {
         }
 
         private fun draw() {
-            if (!visible) return
+            if (!visible || locking) return
             val holder = surfaceHolder
             var canvas: Canvas? = null
             try {
@@ -168,6 +178,31 @@ class DoubleTapWallpaperService : WallpaperService() {
                     surfaceH = surfaceHeight,
                     xOffset = offsetAnimator.value,
                 )
+            } finally {
+                if (canvas != null) {
+                    holder.unlockCanvasAndPost(canvas)
+                }
+            }
+        }
+
+        // Order matters: latch first so any racing animator frame is dropped,
+        // then stop the animator, then paint solid black, *then* invoke the
+        // system lock. The frame queued by unlockCanvasAndPost reaches the
+        // surface before the lock animation begins, so the transition fades
+        // from black to lockscreen instead of from launcher to lockscreen.
+        private fun triggerLock() {
+            locking = true
+            offsetAnimator.stop()
+            fillBlack()
+            LockAccessibilityService.lockNow()
+        }
+
+        private fun fillBlack() {
+            val holder = surfaceHolder
+            var canvas: Canvas? = null
+            try {
+                canvas = holder.lockHardwareCanvas() ?: return
+                canvas.drawColor(Color.BLACK)
             } finally {
                 if (canvas != null) {
                     holder.unlockCanvasAndPost(canvas)

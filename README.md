@@ -71,6 +71,7 @@ Semantic-ish: `versionName` increments tracked in `app/build.gradle.kts`. `versi
 
 | Version | Changes |
 |---|---|
+| 1.1.1 | Smoother lock transition: paint a solid black frame and suppress redraws between the double tap and the system lock animation, eliminating the brief launcher flash. |
 | 1.1.0 | Scrolling/panning wallpaper, hardware canvas rendering, modular `service/wallpaper/` package, i18n (en/es). |
 | 1.0   | Initial release: double-tap-to-lock, custom static wallpaper. |
 
