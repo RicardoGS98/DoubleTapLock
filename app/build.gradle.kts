@@ -74,7 +74,9 @@ android {
 
     buildFeatures {
         compose = true
-        buildConfig = false
+        // Enabled so MainScreen can gate a debug-only solid-color wallpaper
+        // helper on BuildConfig.DEBUG. R8 strips the dead branch in release.
+        buildConfig = true
     }
 
     packaging {

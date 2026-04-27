@@ -4,6 +4,7 @@ import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.Settings
 import androidx.activity.ComponentActivity
@@ -12,6 +13,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,9 +49,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.github.ricardogs98.doubletaplock.BuildConfig
 import io.github.ricardogs98.doubletaplock.R
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -187,6 +192,22 @@ fun MainScreen() {
                     )
                 }
             )
+            // Debug-only escape hatch: emulators without any photos in the
+            // gallery cannot satisfy step 2 via the picker, so offer a small
+            // palette that writes a solid-color JPEG into wallpaper.jpg. R8
+            // strips this whole branch from release builds.
+            if (BuildConfig.DEBUG) {
+                DebugSolidColorRow(
+                    onColorPicked = { argb ->
+                        coroutineScope.launch {
+                            withContext(Dispatchers.IO) {
+                                writeSolidColorWallpaper(wallpaperFile, argb)
+                            }
+                            step2Done = wallpaperFile.exists()
+                        }
+                    }
+                )
+            }
             Spacer(Modifier.height(12.dp))
             StepCard(
                 number = 3,
@@ -352,3 +373,51 @@ private fun buildSetLiveWallpaperIntent(context: Context): Intent =
             ComponentName(context, DoubleTapWallpaperService::class.java)
         )
     }
+
+@Composable
+private fun DebugSolidColorRow(onColorPicked: (Int) -> Unit) {
+    val colors = listOf(
+        Color(0xFF1976D2),
+        Color(0xFF388E3C),
+        Color(0xFFE53935),
+        Color(0xFFFFB300),
+        Color(0xFF616161),
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, start = 4.dp, end = 4.dp)
+    ) {
+        Text(
+            text = "Debug · color sólido como fondo",
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.height(8.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            colors.forEach { color ->
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(color)
+                        .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
+                        .clickable { onColorPicked(color.toArgb()) }
+                )
+            }
+        }
+    }
+}
+
+// 64x64 is plenty: the wallpaper renderer cover-crops it to the surface,
+// and a uniform color compresses to a fraction of a kilobyte as JPEG.
+// FileObserver in DoubleTapWallpaperService picks up the CLOSE_WRITE and
+// reloads live, so the home screen updates without a restart.
+private fun writeSolidColorWallpaper(file: java.io.File, argbColor: Int) {
+    val bitmap = Bitmap.createBitmap(64, 64, Bitmap.Config.ARGB_8888)
+    bitmap.eraseColor(argbColor)
+    file.outputStream().use { out ->
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
+    }
+    bitmap.recycle()
+}
