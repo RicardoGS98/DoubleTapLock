@@ -49,6 +49,10 @@ captures/
 keystore.properties
 !keystore.properties.example
 
+# Personal Play Console submission drafts (paste-into-form notes; not project docs)
+/PLAY_DECLARATION.md
+/DATA_SAFETY.md
+
 # External native build folder
 .cxx/
 

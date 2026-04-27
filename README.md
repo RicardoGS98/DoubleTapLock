@@ -112,9 +112,9 @@ Output: `app/build/outputs/bundle/release/app-release.aab`. Resource shrinking a
 ### 4. Upload to Play Console
 
 - Upload the AAB. **Enrol in Play App Signing on first upload** so Google holds the upload key on your behalf.
-- Fill the [Permission Declaration Form](docs/PLAY_DECLARATION.md) — Double Tap Lock uses `BIND_ACCESSIBILITY_SERVICE` without `isAccessibilityTool="true"`, so a declaration plus a video of the prominent-disclosure flow is required. Reference: <https://support.google.com/googleplay/android-developer/answer/10964491>.
-- Fill the [Data Safety form](docs/DATA_SAFETY.md) — every category answered as **No data collected / No data shared**.
-- Set the Privacy Policy URL to your hosted copy of [`docs/PRIVACY_POLICY.md`](docs/PRIVACY_POLICY.md). Enable GitHub Pages on this repo with `docs/` as the source; the policy will be served at `https://ricardogs98.github.io/DoubleTapLock/PRIVACY_POLICY` (paste this URL in the Play Console privacy-policy field).
+- Fill the **Permission Declaration** in Play Console — Double Tap Lock uses `BIND_ACCESSIBILITY_SERVICE` without `isAccessibilityTool="true"`, so a declaration plus a video of the prominent-disclosure flow is required. Reference: <https://support.google.com/googleplay/android-developer/answer/10964491>.
+- Fill the **Data Safety** form — every category answered as **No data collected / No data shared**.
+- Set the **Privacy Policy URL** to the hosted [`docs/index.md`](docs/index.md). Enable GitHub Pages on this repo with `docs/` as the source; the policy will be served at <https://ricardogs98.github.io/DoubleTapLock/>.
 
 ## Versioning
 

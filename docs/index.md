@@ -1,3 +1,8 @@
+---
+title: Privacy Policy — Double Tap Lock
+description: Double Tap Lock collects no personal data, makes no network calls, and contains no analytics or third-party SDKs.
+---
+
 # Privacy Policy — Double Tap Lock
 
 **Effective date:** 2026-04-27
