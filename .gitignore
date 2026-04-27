@@ -45,6 +45,10 @@ captures/
 *.jks
 *.keystore
 
+# Signing config (contains keystore credentials)
+keystore.properties
+!keystore.properties.example
+
 # External native build folder
 .cxx/
 

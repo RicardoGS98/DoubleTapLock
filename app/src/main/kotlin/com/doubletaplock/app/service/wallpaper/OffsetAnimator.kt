@@ -9,7 +9,7 @@ import kotlin.math.exp
 // Why this exists: the launcher delivers onOffsetsChanged sparsely (often
 // just a handful of callbacks per page swipe — sometimes only the final
 // destination), so driving draw() straight off those callbacks looks like
-// a teleport. Instead we treat each callback as a new *target* and let a
+// a teleport. Instead, we treat each callback as a new *target* and let a
 // Choreographer-driven loop interpolate the actual rendered offset toward
 // it at display refresh rate. setTarget mid-flight just retargets the
 // existing animation, which keeps continuous swipes fluid.

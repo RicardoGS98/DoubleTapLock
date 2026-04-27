@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="wallpaper_description">Toca dos veces el fondo de pantalla para bloquear</string>
-    <string name="accessibility_service_description">Permite bloquear la pantalla con doble toque en el escritorio. La app no lee, escucha ni recolecta ningún dato del dispositivo.</string>
+    <string name="accessibility_service_description">Permite bloquear la pantalla con doble toque en la pantalla de inicio. La app no lee, escucha ni recolecta ningún dato del dispositivo.</string>
 
-    <string name="home_subtitle">Bloquea tu pantalla con doble toque en el escritorio</string>
+    <string name="home_subtitle">Bloquea tu pantalla con doble toque en la pantalla de inicio</string>
     <string name="completion_message">Listo. Doble toque para bloquear.</string>
 
-    <string name="step_1_title">Activar servicio de bloqueo</string>
+    <string name="step_1_title">Activar servicio de bloqueo (Accesibilidad)</string>
     <string name="step_1_description">Necesario para bloquear la pantalla</string>
     <string name="step_2_title">Elegir imagen de fondo</string>
     <string name="step_2_description">Cualquier foto de tu galería</string>
@@ -18,4 +18,19 @@
     <string name="action_pick">Elegir</string>
     <string name="action_change">Cambiar</string>
     <string name="action_reactivate">Reactivar</string>
+
+    <string name="disclosure_title">Antes de continuar</string>
+    <string name="disclosure_intro">Para bloquear la pantalla con doble toque, la app necesita el permiso de accesibilidad. Esto es lo que eso significa.</string>
+    <string name="disclosure_point_1_title">1. Qué vas a activar</string>
+    <string name="disclosure_point_1_body">La app usa el servicio de accesibilidad de Android. Es la única forma de que una app como esta pueda bloquear la pantalla.</string>
+    <string name="disclosure_point_2_title">2. Qué hará la app</string>
+    <string name="disclosure_point_2_body">Cuando toques dos veces la pantalla de inicio, la app le pide a Android que bloquee el dispositivo. Esa es toda la función.</string>
+    <string name="disclosure_point_3_title">3. Qué NO hará la app</string>
+    <string name="disclosure_point_3_body">No leerá lo que hay en tu pantalla, ni rastreará tus toques, ni mirará tus otras apps, ni enviará nada por Internet. La app no tiene permiso de Internet.</string>
+    <string name="disclosure_point_4_title">4. Tú tienes el control</string>
+    <string name="disclosure_point_4_body">Puedes desactivarlo cuando quieras en Ajustes &gt; Accesibilidad.</string>
+    <string name="disclosure_point_5_title">5. No nos creas — compruébalo</string>
+    <string name="disclosure_point_5_body">El código fuente completo es público en GitHub. Puedes leerlo y verificar todo lo anterior antes de conceder el permiso.</string>
+    <string name="disclosure_continue">Continuar</string>
+    <string name="disclosure_cancel">Cancelar</string>
 </resources>

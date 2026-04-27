@@ -31,24 +31,24 @@ The double-tap-to-lock gesture is active as soon as all three steps are green.
 
 ```bash
 ./gradlew assembleDebug      # debug APK at app/build/outputs/apk/debug/app-debug.apk
-./gradlew assembleRelease    # release APK signed with the local debug keystore
 ./gradlew installDebug       # install to a connected device/emulator
 ./gradlew lint               # static analysis
+./gradlew bundleRelease      # signed AAB at app/build/outputs/bundle/release/app-release.aab
 ```
 
-The release config is signed with `~/.android/debug.keystore` (`releaseDebugSigned`) — convenient for sideloading, **not** suitable for Play Store distribution.
+If `keystore.properties` is **not** present at the repo root, the release build falls back to `~/.android/debug.keystore` (the `releaseDebugSigned` config) so contributors can still build and sideload locally. That fallback build is **not** suitable for Play Store upload — see the [Publishing](#publishing) section below for the production signing flow.
 
-Toolchain: Android Gradle Plugin via version catalog, Kotlin + Compose, Java 17, `compileSdk` 35, `minSdk` 31.
+Toolchain: Android Gradle Plugin via version catalog, Kotlin + Compose, Java 17, `compileSdk` 36, `targetSdk` 35, `minSdk` 31.
 
 ## Architecture
 
 Single-activity app. Three pieces cooperate:
 
-| Component | Responsibility |
-|---|---|
+| Component                                | Responsibility                                                                                                                         |
+|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
 | `DoubleTapWallpaperService` (`service/`) | `WallpaperService` engine. Listens for `COMMAND_TAP`, draws the wallpaper, handles offset panning. Glue only — logic lives in helpers. |
-| `LockAccessibilityService` (`service/`) | Empty accessibility service whose only job is to expose a live handle for `GLOBAL_ACTION_LOCK_SCREEN`. |
-| `MainScreen` (`ui/`) | 3-step onboarding Compose UI; status is queried from system state on every `ON_RESUME`, never persisted locally. |
+| `LockAccessibilityService` (`service/`)  | Empty accessibility service whose only job is to expose a live handle for `GLOBAL_ACTION_LOCK_SCREEN`.                                 |
+| `MainScreen` (`ui/`)                     | 3-step onboarding Compose UI; status is queried from system state on every `ON_RESUME`, never persisted locally.                       |
 
 Wallpaper helpers (`service/wallpaper/`):
 
@@ -65,15 +65,67 @@ There is no DI, no DataStore/Room, no `Application` class. State lives in: (a) `
 
 `WallpaperManager.COMMAND_TAP` is the cheapest way to receive tap signals on empty home-screen area: the launcher forwards them, we don't enable raw touch events. The trade-off is launcher dependence — if your launcher doesn't forward taps, the gesture won't fire.
 
+## Publishing
+
+This section is for the human shipping the app to Google Play.
+
+### 1. Generate a release keystore (once, locally)
+
+The keystore is **never** committed. Run on your machine:
+
+```bash
+keytool -genkeypair -v \
+    -keystore release.keystore \
+    -alias doubletaplock \
+    -keyalg RSA -keysize 2048 \
+    -validity 10000 \
+    -storetype PKCS12
+```
+
+Place `release.keystore` at the repo root (the same directory as `keystore.properties.example`), or anywhere else and update the path below.
+
+### 2. Create `keystore.properties`
+
+Copy the template and fill in the values:
+
+```bash
+cp keystore.properties.example keystore.properties
+```
+
+```properties
+storeFile=../release.keystore
+storePassword=<your keystore password>
+keyAlias=doubletaplock
+keyPassword=<your key password>
+```
+
+`keystore.properties` and any `*.keystore` are `.gitignore`'d. Verify with `git status` before committing.
+
+### 3. Build the release AAB
+
+```bash
+./gradlew bundleRelease
+```
+
+Output: `app/build/outputs/bundle/release/app-release.aab`. Resource shrinking and R8 are enabled for the release build type.
+
+### 4. Upload to Play Console
+
+- Upload the AAB. **Enrol in Play App Signing on first upload** so Google holds the upload key on your behalf.
+- Fill the [Permission Declaration Form](docs/PLAY_DECLARATION.md) — Double Tap Lock uses `BIND_ACCESSIBILITY_SERVICE` without `isAccessibilityTool="true"`, so a declaration plus a video of the prominent-disclosure flow is required. Reference: <https://support.google.com/googleplay/android-developer/answer/10964491>.
+- Fill the [Data Safety form](docs/DATA_SAFETY.md) — every category answered as **No data collected / No data shared**.
+- Set the Privacy Policy URL to your hosted copy of [`docs/PRIVACY_POLICY.md`](docs/PRIVACY_POLICY.md). Enable GitHub Pages on this repo with `docs/` as the source; the policy will be served at `https://ricardogs98.github.io/DoubleTapLock/PRIVACY_POLICY` (paste this URL in the Play Console privacy-policy field).
+
 ## Versioning
 
 Semantic-ish: `versionName` increments tracked in `app/build.gradle.kts`. `versionCode` is monotonic.
 
-| Version | Changes |
-|---|---|
-| 1.1.1 | Smoother lock transition: paint a solid black frame and suppress redraws between the double tap and the system lock animation, eliminating the brief launcher flash. |
-| 1.1.0 | Scrolling/panning wallpaper, hardware canvas rendering, modular `service/wallpaper/` package, i18n (en/es). |
-| 1.0   | Initial release: double-tap-to-lock, custom static wallpaper. |
+| Version | Changes                                                                                                                                                                                                                                                                            |
+|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1.2.0   | Prominent-disclosure flow before granting accessibility permission, Play-suitable signing config (`keystore.properties`), `compileSdk` bumped to 36 (`targetSdk` stays at 35 per current Play policy), Play submission docs (privacy policy, permission declaration, data safety). |
+| 1.1.1   | Smoother lock transition: paint a solid black frame and suppress redraws between the double tap and the system lock animation, eliminating the brief launcher flash.                                                                                                               |
+| 1.1.0   | Scrolling/panning wallpaper, hardware canvas rendering, modular `service/wallpaper/` package, i18n (en/es).                                                                                                                                                                        |
+| 1.0     | Initial release: double-tap-to-lock, custom static wallpaper.                                                                                                                                                                                                                      |
 
 ## License
 

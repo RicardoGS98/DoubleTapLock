@@ -8,7 +8,7 @@
     <string name="home_subtitle">Lock your screen with a double tap on the home screen</string>
     <string name="completion_message">Done. Double tap to lock.</string>
 
-    <string name="step_1_title">Enable lock service</string>
+    <string name="step_1_title">Enable lock service (Accessibility)</string>
     <string name="step_1_description">Required to lock the screen</string>
     <string name="step_2_title">Pick a background image</string>
     <string name="step_2_description">Any photo from your gallery</string>
@@ -20,4 +20,21 @@
     <string name="action_pick">Pick</string>
     <string name="action_change">Change</string>
     <string name="action_reactivate">Reactivate</string>
+
+    <string name="disclosure_title">Before you continue</string>
+    <string name="disclosure_intro">To lock your screen with a double tap, the app needs the Accessibility permission. Here\'s what that means.</string>
+    <string name="disclosure_point_1_title">1. What you\'re enabling</string>
+    <string name="disclosure_point_1_body">The app uses Android\'s Accessibility service. It\'s the only way for an app like this to lock your screen.</string>
+    <string name="disclosure_point_2_title">2. What the app will do</string>
+    <string name="disclosure_point_2_body">When you double-tap your home screen, the app tells Android to lock the device. That\'s the whole feature.</string>
+    <string name="disclosure_point_3_title">3. What the app will NOT do</string>
+    <string name="disclosure_point_3_body">It will not read what\'s on your screen, track your taps, look at your other apps, or send anything over the internet. The app has no internet permission at all.</string>
+    <string name="disclosure_point_4_title">4. You stay in control</string>
+    <string name="disclosure_point_4_body">You can turn this off whenever you want, in Settings &gt; Accessibility.</string>
+    <string name="disclosure_point_5_title">5. Don\'t just trust us — check</string>
+    <string name="disclosure_point_5_body">The full source code is public on GitHub. You can read it and confirm everything above before granting the permission.</string>
+    <string name="disclosure_repo_url" translatable="false">https://github.com/RicardoGS98/DoubleTapLock</string>
+    <string name="disclosure_repo_link_label" translatable="false">github.com/RicardoGS98/DoubleTapLock</string>
+    <string name="disclosure_continue">Continue</string>
+    <string name="disclosure_cancel">Cancel</string>
 </resources>

@@ -55,6 +55,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.doubletaplock.app.service.DoubleTapWallpaperService
 import com.doubletaplock.app.service.LockAccessibilityService
+import com.doubletaplock.app.ui.disclosure.AccessibilityDisclosureScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -73,6 +74,7 @@ fun MainScreen() {
     var step1Done by remember { mutableStateOf(isAccessibilityServiceEnabled(context)) }
     var step2Done by remember { mutableStateOf(wallpaperFile.exists()) }
     var step3Done by remember { mutableStateOf(isOurLiveWallpaperActive(context)) }
+    var showDisclosure by remember { mutableStateOf(false) }
 
     val lifecycle = (context as ComponentActivity).lifecycle
     DisposableEffect(lifecycle) {
@@ -122,6 +124,17 @@ fun MainScreen() {
         else -> 0
     }
 
+    if (showDisclosure) {
+        AccessibilityDisclosureScreen(
+            onContinue = {
+                showDisclosure = false
+                accessibilityLauncher.launch(buildAccessibilitySettingsIntent())
+            },
+            onCancel = { showDisclosure = false }
+        )
+        return
+    }
+
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
@@ -152,7 +165,13 @@ fun MainScreen() {
                 activeLabel = stringResource(R.string.action_activate),
                 completedLabel = stringResource(R.string.action_review),
                 state = stateFor(1, activeIndex, step1Done),
-                onAction = { accessibilityLauncher.launch(buildAccessibilitySettingsIntent()) }
+                onAction = {
+                    if (step1Done) {
+                        accessibilityLauncher.launch(buildAccessibilitySettingsIntent())
+                    } else {
+                        showDisclosure = true
+                    }
+                }
             )
             Spacer(Modifier.height(12.dp))
             StepCard(

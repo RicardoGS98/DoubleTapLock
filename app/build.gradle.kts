@@ -1,18 +1,37 @@
+import java.io.File
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
 }
 
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) {
+        keystorePropertiesFile.inputStream().use { load(it) }
+    }
+}
+
+fun String.resolveKeystorePath(): File {
+    val asFile = File(this)
+    return if (asFile.isAbsolute) asFile else rootProject.file(this)
+}
+
+val hasReleaseSigning: Boolean = listOf(
+    "storeFile", "storePassword", "keyAlias", "keyPassword"
+).all { (keystoreProperties[it] as? String)?.isNotBlank() == true }
+
 android {
     namespace = "com.doubletaplock.app"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.doubletaplock.app"
         minSdk = 31
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.1.1"
+        versionCode = 4
+        versionName = "1.2.0"
     }
 
     signingConfigs {
@@ -22,13 +41,25 @@ android {
             keyAlias = "androiddebugkey"
             keyPassword = "android"
         }
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = (keystoreProperties["storeFile"] as String).resolveKeystorePath()
+                storePassword = keystoreProperties["storePassword"] as String
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+            }
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            signingConfig = signingConfigs.getByName("releaseDebugSigned")
+            signingConfig = if (hasReleaseSigning) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("releaseDebugSigned")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
