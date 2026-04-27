@@ -1,4 +1,4 @@
-package com.doubletaplock.app.ui
+package io.github.ricardogs98.doubletaplock.ui
 
 import android.app.WallpaperManager
 import android.content.ComponentName
@@ -50,12 +50,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.doubletaplock.app.R
+import io.github.ricardogs98.doubletaplock.R
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.doubletaplock.app.service.DoubleTapWallpaperService
-import com.doubletaplock.app.service.LockAccessibilityService
-import com.doubletaplock.app.ui.disclosure.AccessibilityDisclosureScreen
+import io.github.ricardogs98.doubletaplock.service.DoubleTapWallpaperService
+import io.github.ricardogs98.doubletaplock.service.LockAccessibilityService
+import io.github.ricardogs98.doubletaplock.ui.disclosure.AccessibilityDisclosureScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

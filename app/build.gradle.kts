@@ -23,15 +23,15 @@ val hasReleaseSigning: Boolean = listOf(
 ).all { (keystoreProperties[it] as? String)?.isNotBlank() == true }
 
 android {
-    namespace = "com.doubletaplock.app"
+    namespace = "io.github.ricardogs98.doubletaplock"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.doubletaplock.app"
+        applicationId = "io.github.ricardogs98.doubletaplock"
         minSdk = 31
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.2.0"
+        versionCode = 5
+        versionName = "1.2.1"
     }
 
     signingConfigs {

@@ -1,4 +1,4 @@
-package com.doubletaplock.app.service.wallpaper
+package io.github.ricardogs98.doubletaplock.service.wallpaper
 
 import android.graphics.Bitmap
 import android.graphics.Canvas

@@ -1,4 +1,4 @@
-package com.doubletaplock.app.service.wallpaper
+package io.github.ricardogs98.doubletaplock.service.wallpaper
 
 // Single-shot detector: returns true exactly once when a tap lands within
 // thresholdMs of the previous one. Resets after firing so a triple tap

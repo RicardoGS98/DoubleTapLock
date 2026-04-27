@@ -1,4 +1,4 @@
-package com.doubletaplock.app.ui.disclosure
+package io.github.ricardogs98.doubletaplock.ui.disclosure
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,7 +24,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import com.doubletaplock.app.R
+import io.github.ricardogs98.doubletaplock.R
 
 /**
  * Full-screen prominent disclosure shown before redirecting the user to system Accessibility

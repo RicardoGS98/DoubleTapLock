@@ -8,7 +8,7 @@ description: Double Tap Lock collects no personal data, makes no network calls, 
 **Effective date:** 2026-04-27
 
 This document describes the privacy practices of the Android application **Double Tap Lock** (
-package name `com.doubletaplock.app`), distributed on Google Play.
+package name `io.github.ricardogs98.doubletaplock`), distributed on Google Play.
 
 ## TL;DR
 

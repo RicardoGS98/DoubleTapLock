@@ -1,4 +1,4 @@
-package com.doubletaplock.app.service
+package io.github.ricardogs98.doubletaplock.service
 
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent

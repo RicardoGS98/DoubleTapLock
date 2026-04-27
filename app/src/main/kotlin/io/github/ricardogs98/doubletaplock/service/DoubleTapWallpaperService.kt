@@ -1,4 +1,4 @@
-package com.doubletaplock.app.service
+package io.github.ricardogs98.doubletaplock.service
 
 import android.app.WallpaperColors
 import android.app.WallpaperManager
@@ -10,10 +10,10 @@ import android.os.FileObserver
 import android.os.SystemClock
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
-import com.doubletaplock.app.service.wallpaper.DoubleTapDetector
-import com.doubletaplock.app.service.wallpaper.OffsetAnimator
-import com.doubletaplock.app.service.wallpaper.loadCoverBitmap
-import com.doubletaplock.app.service.wallpaper.renderCoverCrop
+import io.github.ricardogs98.doubletaplock.service.wallpaper.DoubleTapDetector
+import io.github.ricardogs98.doubletaplock.service.wallpaper.OffsetAnimator
+import io.github.ricardogs98.doubletaplock.service.wallpaper.loadCoverBitmap
+import io.github.ricardogs98.doubletaplock.service.wallpaper.renderCoverCrop
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

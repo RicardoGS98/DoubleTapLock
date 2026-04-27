@@ -1,2 +1,2 @@
--keep class com.doubletaplock.app.service.DoubleTapWallpaperService { *; }
--keep class com.doubletaplock.app.service.LockAccessibilityService { *; }
+-keep class io.github.ricardogs98.doubletaplock.service.DoubleTapWallpaperService { *; }
+-keep class io.github.ricardogs98.doubletaplock.service.LockAccessibilityService { *; }
